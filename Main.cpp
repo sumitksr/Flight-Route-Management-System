@@ -46,7 +46,7 @@ public:
             pq.pop();
 
             if (city == lowerDestination) {
-                cout << "Shortest path cost from " << start << " to " << destination << ": ₹" << dist << endl;
+                cout << "Shortest path cost from " << start << " to " << destination << ": Rs." << dist << endl;
                 return;
             }
 
