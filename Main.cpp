@@ -3,11 +3,11 @@
 #include <map>
 #include <queue>
 #include <climits>
-#include <algorithm> 
+#include <algorithm>
 using namespace std;
 
 class FlightRoutes {
-    map<string, vector<pair<string, int>>> graph; 
+    map<string, vector<pair<string, int>>> graph;
 
     string toLower(const string& str) {
         string lowerStr = str;
@@ -16,15 +16,13 @@ class FlightRoutes {
     }
 
 public:
-
     void addRoute(const string& from, const string& to, int cost) {
         string lowerFrom = toLower(from);
         string lowerTo = toLower(to);
         graph[lowerFrom].push_back({lowerTo, cost});
-        graph[lowerTo].push_back({lowerFrom, cost}); 
+        graph[lowerTo].push_back({lowerFrom, cost});
     }
 
-   
     void findShortestPath(const string& start, const string& destination) {
         string lowerStart = toLower(start);
         string lowerDestination = toLower(destination);
@@ -35,6 +33,7 @@ public:
         }
 
         map<string, int> distances;
+        map<string, string> previous; // To reconstruct the path
         for (auto& node : graph) distances[node.first] = INT_MAX;
         distances[lowerStart] = 0;
 
@@ -46,7 +45,17 @@ public:
             pq.pop();
 
             if (city == lowerDestination) {
+                // Output the path and cost
+                vector<string> path;
+                for (string at = lowerDestination; !at.empty(); at = previous[at]) {
+                    path.push_back(at);
+                }
+                reverse(path.begin(), path.end());
+
                 cout << "Shortest path cost from " << start << " to " << destination << ": Rs." << dist << endl;
+                cout << "Path: ";
+                for (const auto& p : path) cout << p << " ";
+                cout << endl;
                 return;
             }
 
@@ -54,6 +63,7 @@ public:
                 int newDist = dist + neighbor.second;
                 if (newDist < distances[neighbor.first]) {
                     distances[neighbor.first] = newDist;
+                    previous[neighbor.first] = city;
                     pq.push({newDist, neighbor.first});
                 }
             }
@@ -61,7 +71,6 @@ public:
 
         cout << "No route found.\n";
     }
-
 
     void displayRoutes(const string& start, const string& destination) {
         string lowerStart = toLower(start);
@@ -122,7 +131,6 @@ int main() {
         {{"Pune", "Mumbai"}, 300}
     };
 
-  
     for (auto& route : routes) {
         fr.addRoute(route.first.first, route.first.second, route.second);
     }
