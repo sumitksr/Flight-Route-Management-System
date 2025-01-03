@@ -70,6 +70,43 @@ public:
 
         cout << "No route found.\n";
     }
+
+    void displayAllRoutes(const string& start, const string& destination) {
+        string lowerStart = toLower(start);
+        string lowerDestination = toLower(destination);
+
+        if (graph.find(lowerStart) == graph.end() || graph.find(lowerDestination) == graph.end()) {
+            cout << "One or both cities do not exist in the graph.\n";
+            return;
+        }
+
+        map<string, bool> visited;
+        vector<string> path;
+        int totalCost = 0;
+
+        cout << "All possible routes:\n";
+        dfs(lowerStart, lowerDestination, visited, path, totalCost);
+    }
+
+private:
+    void dfs(const string& current, const string& destination, map<string, bool>& visited, vector<string>& path, int totalCost) {
+        visited[current] = true;
+        path.push_back(current);
+
+        if (current == destination) {
+            for (const auto& city : path) cout << city << " ";
+            cout << "- Cost: Rs." << totalCost << endl;
+        } else {
+            for (const auto& neighbor : graph[current]) {
+                if (!visited[neighbor.first]) {
+                    dfs(neighbor.first, destination, visited, path, totalCost + neighbor.second);
+                }
+            }
+        }
+
+        path.pop_back();
+        visited[current] = false;
+    }
 };
 
 int main() {
@@ -131,6 +168,7 @@ int main() {
     cin >> destination;
 
     cout << "\n1. Find Shortest Path\n";
+    cout << "2. Display All Routes\n";
     cout << "Enter your choice: ";
     int choice;
     cin >> choice;
@@ -138,6 +176,9 @@ int main() {
     if (choice == 1) {
         cout << "Finding shortest path from " << start << " to " << destination << "...\n";
         fr.findShortestPath(start, destination);
+    } else if (choice == 2) {
+        cout << "Displaying all routes from " << start << " to " << destination << "...\n";
+        fr.displayAllRoutes(start, destination);
     } else {
         cout << "Invalid choice. Exiting program.\n";
     }
