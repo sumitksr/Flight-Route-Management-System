@@ -88,6 +88,58 @@ public:
         dfs(lowerStart, lowerDestination, visited, path, totalCost);
     }
 
+   void findPathWithKStops(const string& start, const string& destination, int k) {
+    string lowerStart = toLower(start);
+    string lowerDestination = toLower(destination);
+
+    if (graph.find(lowerStart) == graph.end() || graph.find(lowerDestination) == graph.end()) {
+        cout << "One or both cities do not exist in the graph.\n";
+        return;
+    }
+
+    queue<pair<string, pair<int, pair<int, vector<string>>>>> q; // {current_city, {stops, {cost, path}}}
+    q.push({lowerStart, {0, {0, {lowerStart}}}});
+
+    int minCost = INT_MAX;
+    vector<string> bestPath;
+
+    while (!q.empty()) {
+        auto [city, data] = q.front();
+        q.pop();
+
+        int stops = data.first;
+        int cost = data.second.first;
+        vector<string> path = data.second.second;
+
+        if (stops > k) continue;
+
+        if (city == lowerDestination) {
+            if (cost < minCost) {
+                minCost = cost;
+                bestPath = path;
+            }
+            continue;
+        }
+
+        for (auto& neighbor : graph[city]) {
+            vector<string> newPath = path;
+            newPath.push_back(neighbor.first);
+            q.push({neighbor.first, {stops + 1, {cost + neighbor.second, newPath}}});
+        }
+    }
+
+    if (minCost == INT_MAX) {
+        cout << "No route found with at most " << k << " stops.\n";
+    } else {
+        cout << "Minimum cost from " << start << " to " << destination << " with at most " << k << " stops: Rs." << minCost << endl;
+        cout << "Path: ";
+        for (const auto& city : bestPath) {
+            cout << city << " ";
+        }
+        cout << endl;
+    }
+}
+
 private:
     void dfs(const string& current, const string& destination, map<string, bool>& visited, vector<string>& path, int totalCost) {
         visited[current] = true;
@@ -169,6 +221,7 @@ int main() {
 
     cout << "\n1. Find Shortest Path\n";
     cout << "2. Display All Routes\n";
+    cout << "3. Find Path with K Stops\n";
     cout << "Enter your choice: ";
     int choice;
     cin >> choice;
@@ -179,6 +232,12 @@ int main() {
     } else if (choice == 2) {
         cout << "Displaying all routes from " << start << " to " << destination << "...\n";
         fr.displayAllRoutes(start, destination);
+    } else if (choice == 3) {
+        int k;
+        cout << "Enter the maximum number of stops: ";
+        cin >> k;
+        cout << "Finding path from " << start << " to " << destination << " with at most " << k << " stops...\n";
+        fr.findPathWithKStops(start, destination, k);
     } else {
         cout << "Invalid choice. Exiting program.\n";
     }
