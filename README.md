@@ -1,12 +1,13 @@
 # Flight Route System
 
-This repository contains a C++ program to simulate a flight route system. The system allows users to find the shortest path between two cities based on cost and display all possible routes between the cities using Depth-First Search (DFS).
+This repository contains a C++ program to simulate a flight route management system. The system allows users to find the shortest path between two cities based on cost, display all possible routes between cities, and find paths with a limited number of stops
 
 ## Features
 
 - **Add Routes:** Add flight routes between cities with associated costs.
 - **Find Shortest Path:** Compute the shortest path between two cities using Dijkstra's algorithm.
 - **Display All Routes:** List all possible routes between two cities.
+- **Find Path with Limited Stops:** Find a route between two cities with a user-defined maximum number of stops.
 
 ## Cities Included
 
@@ -37,6 +38,7 @@ The system includes the following cities and their connections:
 3. **Select an option** from the menu:
    - **Find Shortest Path:** Displays the shortest path and its cost between the two cities.
    - **Display All Routes:** Lists all possible routes between the two cities.
+   - **Find Path with K Stops:** Finds the cheapest path between two cities with a user-defined maximum number of stops.
      
 ## Code Overview
 
@@ -61,6 +63,7 @@ The system includes the following cities and their connections:
     shortest path and cost between two cities.
   - displayRoutes: Uses Depth-First Search (DFS) to find and display all 
     possible routes between two cities.
+  - findPathWithKStops: Finds the cheapest path between two cities with at most K stops, displaying the route and cost.
 #### 3. Error Handling:
  
   - Detects invalid city names and displays appropriate error messages.
@@ -77,17 +80,17 @@ The system includes the following cities and their connections:
 Below is an example of interaction with the program:
 
 ```plaintext
---- Flight Route System ---
+--- Flight Route Management System ---
 List of cities: Delhi, Mumbai, Bangalore, Hyderabad, Chennai, Kolkata, Ahmedabad, Jaipur, Lucknow, Varanasi, Patna, Ranchi, Bhubaneswar, Pune, Coimbatore
+International cities: Dubai, Singapore, London, New York, Bangkok
+
 Enter starting city: Delhi
 Enter destination city: Mumbai
 
-1. Find the Shortest Path
+1. Find Shortest Path
 2. Display All Routes
-Enter your choice: 1
-
-Finding shortest path from Delhi to Mumbai...
-Shortest path cost from Delhi to Mumbai: ₹1200
+3. Find Path with K Stops
+Enter your choice:
  
 
 
